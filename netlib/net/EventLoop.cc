@@ -51,8 +51,8 @@ void EventLoop::assertInLoopThread() {
     }
 }
 
-bool EventLoop::isInLoopThread() {
-    return t_loopInThisThread;
+bool EventLoop::isInLoopThread() const {
+    return threadid_ == std::this_thread::get_id();
 }
 
 void EventLoop::abortNotInLoopThread() {

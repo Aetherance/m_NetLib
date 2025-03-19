@@ -3,21 +3,21 @@
 
 #include<thread>
 #include<memory>
+#include"../base/noncopyable.h"
 
 namespace ilib {
 namespace net {
 
-class EventLoop
+class EventLoop : noncopyable
 {
 public:
-EventLoop();
-    EventLoop(EventLoop &) = delete;
+    EventLoop();
     ~EventLoop();
     
     void loop();
     
     void assertInLoopThread();
-    bool isInLoopThread();
+    bool isInLoopThread() const;
     static EventLoop * getThreadLoop();
     
     private:
