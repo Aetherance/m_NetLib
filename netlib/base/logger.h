@@ -1,3 +1,6 @@
+#ifndef LOG_H
+#define LOG_H
+
 #include<time.h>
 #include<string.h>
 #include<iostream>
@@ -205,5 +208,6 @@ inline void logger::clientlog(int type,int fd,std::string event) {
 }
 
 }
-
 }
+
+#endif
