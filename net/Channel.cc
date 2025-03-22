@@ -40,3 +40,23 @@ void Channel::handleEvent() {
         }
     }
 }
+
+void Channel::enableReading() {
+    events_ |= kReadEvent;
+    update();
+}
+
+void Channel::enableWriting() {
+    events_ |= kWriteEvent;
+    update();
+}
+
+void Channel::disableWriting() {
+    events_ &= ~kWriteEvent;
+    update();
+}
+
+void Channel::disableAll() {
+    events_ = kNoneEvent;
+    update();
+}

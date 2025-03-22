@@ -1,6 +1,7 @@
 #include"EventLoop.h"
 #include<iostream>
 #include<poll.h>
+#include"Channel.h"
 
 using namespace ilib::net;
 
@@ -39,8 +40,15 @@ void EventLoop::loop() {
     }
     assertInLoopThread();
     looping_ = true;
+    quit_ = false;
 
-    ::poll(nullptr,0,5000);
+    while (!quit_) {
+        activeChannels_.clear();
+        poller_->poll(-1,activeChannels_);
+        for(auto channel : activeChannels_) {
+            channel->handleEvent();
+        }
+    }
 
     looping_ = false;
 }
@@ -59,4 +67,12 @@ void EventLoop::abortNotInLoopThread() {
     // abort
     std::cerr<<"Eventloop: Not in loop thread";
     exit(EXIT_FAILURE);
+}
+
+void EventLoop::updateChannel(Channel * channel) {
+    poller_->updateChannel(channel);
+}
+
+void EventLoop::quit() {
+    quit_ = true;
 }

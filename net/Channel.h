@@ -1,3 +1,6 @@
+#ifndef CHANNEL_H
+#define CHANNEL_H
+
 #include<functional>
 #include"../base/noncopyable.h"
 
@@ -24,10 +27,10 @@ public:
     void disableWriting();
     void disableAll();
 
-    int index();
-    void set_index(int idx);
+    inline int index();
+    inline void set_index(int idx);
 
-    EventLoop *ownerLoop();
+    inline EventLoop *ownerLoop();
 private:
     void update();
 
@@ -74,5 +77,19 @@ bool Channel::isNoneEvent() const {
     return events_ == kNoneEvent;
 }
 
+int Channel::index() {
+    return index_;
+}
+
+void Channel::set_index(int idx) {
+    index_ = idx;
+}
+
+EventLoop * Channel::ownerLoop() {
+    return loop_;
+}
+
 }
 }
+
+#endif
