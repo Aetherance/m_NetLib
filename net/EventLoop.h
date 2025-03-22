@@ -8,6 +8,7 @@
 namespace ilib {
 namespace net {
 
+class Channel;
 class EventLoop : noncopyable
 {
 public:
@@ -19,6 +20,7 @@ public:
     void assertInLoopThread();
     bool isInLoopThread() const;
     static EventLoop * getThreadLoop();
+    void updateChannel(Channel * channel);
     
     private:
     void abortNotInLoopThread();

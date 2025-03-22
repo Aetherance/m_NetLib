@@ -1,0 +1,78 @@
+#include<functional>
+#include"../base/noncopyable.h"
+
+namespace ilib {
+namespace net {
+class EventLoop;
+class Channel : noncopyable
+{
+public:
+    using EventCallback = std::function<void()>;
+    Channel(EventLoop*loop,int fd);
+    void handleEvent();
+    inline void setReadCallback(const EventCallback & cb);
+    inline void setWriteCallback(const EventCallback & cb);
+    inline void setErrorCallback(const EventCallback & cb);
+
+    inline int fd() const;
+    inline int events() const;
+    inline void set_revents(int revt);
+    inline bool isNoneEvent() const;
+
+    void enableReading();
+    void enableWriting();
+    void disableWriting();
+    void disableAll();
+
+    int index();
+    void set_index(int idx);
+
+    EventLoop *ownerLoop();
+private:
+    void update();
+
+    static const int kNoneEvent;
+    static const int kReadEvent;
+    static const int kWriteEvent;
+
+    EventLoop * loop_;
+    const int fd_;
+    int events_;
+    int revents_;
+    int index_;
+
+    EventCallback readCallback;
+    EventCallback writeCallback;
+    EventCallback errorCallback;
+};
+
+void Channel::setReadCallback(const EventCallback &cb) {
+    readCallback = cb;
+}
+
+void Channel::setWriteCallback(const EventCallback &cb) {
+    writeCallback = cb;
+}
+
+void Channel::setErrorCallback(const EventCallback &cb) {
+    errorCallback = cb;
+}
+
+int Channel::fd() const{
+    return fd_;
+}
+
+int Channel::events() const{
+    return events_;
+}
+
+void Channel::set_revents(int revt) {
+    revents_ = revt;
+}
+
+bool Channel::isNoneEvent() const {
+    return events_ == kNoneEvent;
+}
+
+}
+}
