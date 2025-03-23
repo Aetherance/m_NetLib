@@ -2,13 +2,14 @@
 #include<iostream>
 #include<poll.h>
 #include"Channel.h"
+#include"Poller.h"
 
 using namespace ilib::net;
 
 thread_local EventLoop * t_loopInThisThread = nullptr;
 
 EventLoop::EventLoop() : 
-looping_(false) , threadid_(std::this_thread::get_id()) {
+looping_(false) , threadid_(std::this_thread::get_id()) , poller_(std::make_unique<Poller>(this)) {
     
     // 已经存在Eventloop对象
     if(t_loopInThisThread) {
@@ -75,4 +76,4 @@ void EventLoop::updateChannel(Channel * channel) {
 
 void EventLoop::quit() {
     quit_ = true;
-}
+}  

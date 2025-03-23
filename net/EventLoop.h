@@ -6,11 +6,11 @@
 #include"../base/noncopyable.h"
 #include<memory>
 #include<vector>
-#include"Poller.h"
 
 namespace ilib {
 namespace net {
 
+class Poller;
 class Channel;
 class EventLoop : noncopyable
 {
