@@ -10,15 +10,15 @@ class Timer;
 class TimerId
 {
 public:
-    TimerId(Timer * timer,int64_t seq = 0);
+    TimerId(Timer * timer);
     friend class TimerQueue;
 private:
     Timer *timer_;
     int64_t seq_;
 };
 
-inline TimerId::TimerId(Timer * timer,int64_t seq = 0) :
-timer_(timer) , seq_(seq)
+inline TimerId::TimerId(Timer * timer) :
+timer_(timer)
 {}
 
 }    

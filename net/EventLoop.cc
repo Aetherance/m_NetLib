@@ -49,6 +49,7 @@ void EventLoop::loop() {
         for(auto channel : activeChannels_) {
             channel->handleEvent();
         }
+        doPendingFunctors();
     }
 
     looping_ = false;
@@ -76,4 +77,56 @@ void EventLoop::updateChannel(Channel * channel) {
 
 void EventLoop::quit() {
     quit_ = true;
+    if(!isInLoopThread()) {
+        wakeup();
+    }
 }  
+
+TimerId EventLoop::runAt(const Timestamp &time,const Timer::TimerCallback &cb) {
+    return timerqueue_->addTimer(cb,time,0);
+}
+
+TimerId EventLoop::runAfter(double delay,const Timer::TimerCallback &cb) {
+    Timestamp time(Timestamp::addTime(Timestamp::now(),delay));
+    return runAt(time,cb);
+}
+
+TimerId EventLoop::runEvery(double interval,const Timer::TimerCallback &cb) {
+    Timestamp time(Timestamp::addTime(Timestamp::now(),interval));
+    return timerqueue_->addTimer(cb,time,interval);
+}
+
+void EventLoop::runInloop(const Functor&cb) {
+    if(isInLoopThread()) {
+        cb();
+    } else {
+        queueInLoop(cb);
+    }
+}
+
+void EventLoop::queueInLoop(const Functor &cb) {
+    {
+        std::unique_lock(mtx);
+        pendingFunctors_.push_back(cb);
+    }
+
+    if(!isInLoopThread() || callingPendingFunctors_) {
+        wakeup();
+    }
+}
+
+void EventLoop::doPendingFunctors() {
+    std::vector<Functor>functors;
+    callingPendingFunctors_ = true;
+
+    {
+        std::unique_lock lock(mtx);
+        functors.swap(pendingFunctors_);
+    }
+
+    for(auto functor : functors) {
+        functor();
+    }
+
+    callingPendingFunctors_ = false;
+}

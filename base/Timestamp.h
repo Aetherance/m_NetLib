@@ -22,8 +22,8 @@ public:
     bool operator<=(Timestamp&);
     bool operator>=(Timestamp&);
 
-    static double timeDifference(Timestamp& high, Timestamp& low);
-    static Timestamp addTime(Timestamp& timestamp,double seconds);
+    static double timeDifference(Timestamp high, Timestamp low);
+    static Timestamp addTime(Timestamp timestamp,double seconds);
 
     ~Timestamp() = default;
 private:

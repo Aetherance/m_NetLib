@@ -27,13 +27,10 @@ private:
     Timestamp expiration_;
     const double interval_;
     const bool repeat_;
-
-    const int64_t sequence_;
-    inline static std::atomic<int64_t>numCreated = 0;
 };
 
 inline Timer::Timer(TimerCallback cb,Timestamp when,double interval) :
-callback_(cb) , expiration_(when) , interval_(interval) , repeat_(interval > 0) ,  sequence_(++ numCreated)
+callback_(cb) , expiration_(when) , interval_(interval) , repeat_(interval > 0)
 {}
 
 inline void Timer::run() const {
@@ -46,10 +43,6 @@ inline Timestamp Timer::expiration() const {
 
 inline bool Timer::repeat() const {
     return repeat_;
-}
-
-inline int64_t Timer::sequence() const {
-    return sequence_;
 }
 
 inline void Timer::restart(Timestamp now) {

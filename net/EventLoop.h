@@ -6,6 +6,9 @@
 #include"../base/noncopyable.h"
 #include<memory>
 #include<vector>
+#include"TimerQueue.h"
+#include"TimerId.h"
+#include<mutex>
 
 namespace ilib {
 namespace net {
@@ -26,16 +29,35 @@ public:
     static EventLoop * getThreadLoop();
     void updateChannel(Channel * channel);
     
+    TimerId runAt(const Timestamp &time,const Timer::TimerCallback &cb);
+    TimerId runAfter(double delay,const Timer::TimerCallback &cb);
+    TimerId runEvery(double interval,const Timer::TimerCallback &cb);
+
+    using Functor = std::function<void()>;
+    void runInloop(const Functor &cb);
+    void queueInLoop(const Functor& cb);
+
     private:
     void abortNotInLoopThread();
+    void handleRead();
+    void doPendingFunctors();
 
     using ChannelList = std::vector<Channel*>;
     
     bool quit_;
     bool looping_;
+    bool callingPendingFunctors_;
+
     const std::thread::id threadid_;
     std::unique_ptr<Poller>poller_;
+
+    int wakeupFd_;
+    std::unique_ptr<Channel>wakeupChannel_;
+    
     ChannelList activeChannels_;
+    std::unique_ptr<TimerQueue>timerqueue_;
+    std::mutex mtx;
+    std::vector<Functor>pendingFunctors_;
 };
 
 }
