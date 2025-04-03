@@ -15,8 +15,8 @@ public:
     unsigned int toPort() const;
     std::string toIpPort() const;
 
-    const sockaddr * getSockAddr() const {
-        return reinterpret_cast<const sockaddr *>(&addr_);
+    const sockaddr_in& getSockAddr() const {
+        return addr_;
     }
 
     socklen_t getSockLen() const { return sizeof(addr_); };
