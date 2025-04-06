@@ -1,3 +1,6 @@
+#ifndef INADD_H
+#define INADD_H
+
 #include<string>
 #include<arpa/inet.h>
 #include<memory.h>
@@ -44,3 +47,5 @@ InetAddress::InetAddress(const sockaddr_in & addr) {
 
 }
 }
+
+#endif

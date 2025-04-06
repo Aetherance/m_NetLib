@@ -23,7 +23,6 @@ public:
     int accept(InetAddress* peeraddr);
 
     void setReuseAddr(bool on) const;
-    void setTcpNoDelay(bool on);
     void shutdownWrite() const;
 
 private:
