@@ -14,9 +14,9 @@ public:
     InetAddress(const std::string &ip,unsigned int port);
     InetAddress(const sockaddr_in & addr);
 
-    std::string toIp() const;
-    unsigned int toPort() const;
-    std::string toIpPort() const;
+    // std::string toIp() const;
+    // unsigned int toPort() const;
+    // std::string toIpPort() const;
 
     const sockaddr_in& getSockAddr() const {
         return addr_;
@@ -27,21 +27,21 @@ private:
     sockaddr_in addr_;
 };
 
-InetAddress::InetAddress(unsigned int port = 0) {
+inline InetAddress::InetAddress(unsigned int port) {
     memset(&addr_,0,getSockLen());
     addr_.sin_family = AF_INET;
     addr_.sin_port = htons(port);
     addr_.sin_addr.s_addr = INADDR_ANY;
 }
 
-InetAddress::InetAddress(const std::string &ip,unsigned int port) {
+inline InetAddress::InetAddress(const std::string &ip,unsigned int port) {
     memset(&addr_,0,getSockLen());
     addr_.sin_family = AF_INET;
     inet_pton(AF_INET,ip.c_str(),&addr_.sin_addr);
     addr_.sin_port = htons(port);
 }
 
-InetAddress::InetAddress(const sockaddr_in & addr) {
+inline InetAddress::InetAddress(const sockaddr_in & addr) {
     memcpy(&addr_,&addr,sizeof(addr_));
 }
 

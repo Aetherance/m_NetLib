@@ -45,10 +45,10 @@ bool Timestamp::operator>=(Timestamp& that_time) {
     return microSecondsSinceEpoch_ >= that_time.microSecondsSinceEpoch_;
 }
 
-double Timestamp::timeDifference(Timestamp& high,Timestamp& low) {
+double Timestamp::timeDifference(Timestamp high,Timestamp low) {
     return (high.microSecondsSinceEpoch_ - low.microSecondsSinceEpoch_)/1000000;
 }
 
-static Timestamp addTime(Timestamp& timestamp,double seconds) {
+Timestamp Timestamp::addTime(Timestamp timestamp,double seconds) {
     return Timestamp(timestamp.microSecondsSinceEpoch() + seconds * 1000 * 1000);
 }

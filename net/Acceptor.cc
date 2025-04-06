@@ -20,7 +20,7 @@ void Acceptor::listen() {
 
 void Acceptor::handleRead() {
     loop_->assertInLoopThread();
-    InetAddress peerAddr(NULL);
+    InetAddress peerAddr(0);
 
     int sock = acceptSocket_.accept(&peerAddr);
     if(sock >= 0) {

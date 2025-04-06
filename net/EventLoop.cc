@@ -3,14 +3,18 @@
 #include<poll.h>
 #include"Channel.h"
 #include"Poller.h"
+#include<sys/eventfd.h>
+#include<unistd.h>
 
 using namespace ilib::net;
 
 thread_local EventLoop * t_loopInThisThread = nullptr;
 
 EventLoop::EventLoop() : 
-looping_(false) , threadid_(std::this_thread::get_id()) , poller_(std::make_unique<Poller>(this)) {
-    
+    looping_(false) , threadid_(std::this_thread::get_id()) , 
+    poller_(std::make_unique<Poller>(this)) , wakeupFd_(makeWakeUpFd()) ,
+    wakeupChannel_(new Channel(this,wakeupFd_))
+{
     // 已经存在Eventloop对象
     if(t_loopInThisThread) {
         std::cerr<<"Eventloop: loop has been created\n";
@@ -18,6 +22,9 @@ looping_(false) , threadid_(std::this_thread::get_id()) , poller_(std::make_uniq
     } else {
         t_loopInThisThread = this;
     }
+
+    wakeupChannel_->setReadCallback([this]{handleRead();});
+    wakeupChannel_->enableReading();
 }
 
 EventLoop::~EventLoop() {
@@ -106,7 +113,7 @@ void EventLoop::runInloop(const Functor&cb) {
 
 void EventLoop::queueInLoop(const Functor &cb) {
     {
-        std::unique_lock(mtx);
+        std::unique_lock<std::mutex>(mtx);
         pendingFunctors_.push_back(cb);
     }
 
@@ -129,4 +136,12 @@ void EventLoop::doPendingFunctors() {
     }
 
     callingPendingFunctors_ = false;
+}
+
+void EventLoop::wakeup() {
+    ::write(wakeupFd_,"wake",sizeof("wake"));
+}
+
+int EventLoop::makeWakeUpFd() {
+    return eventfd(0,EFD_NONBLOCK | EFD_CLOEXEC);
 }

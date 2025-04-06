@@ -49,15 +49,23 @@ public:
     bool callingPendingFunctors_;
 
     const std::thread::id threadid_;
+    
+    // Poller
     std::unique_ptr<Poller>poller_;
 
+    // wakeup
     int wakeupFd_;
     std::unique_ptr<Channel>wakeupChannel_;
     
+    // Channel
     ChannelList activeChannels_;
+    
     std::unique_ptr<TimerQueue>timerqueue_;
     std::mutex mtx;
     std::vector<Functor>pendingFunctors_;
+
+    void wakeup();
+    int makeWakeUpFd();
 };
 
 }
