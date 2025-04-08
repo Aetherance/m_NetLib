@@ -139,7 +139,8 @@ void EventLoop::doPendingFunctors() {
 }
 
 void EventLoop::wakeup() {
-    ::write(wakeupFd_,"wake",sizeof("wake"));
+    int64_t num = 1;
+    ::write(wakeupFd_,&num,sizeof(num));
 }
 
 int EventLoop::makeWakeUpFd() {

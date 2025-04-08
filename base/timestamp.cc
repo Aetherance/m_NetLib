@@ -25,23 +25,23 @@ bool Timestamp::valid() const {
     return microSecondsSinceEpoch_ > 0;
 }
 
-bool Timestamp::operator==(Timestamp& that_time) {
+bool Timestamp::operator==(Timestamp that_time) {
     return microSecondsSinceEpoch_ == that_time.microSecondsSinceEpoch_;
 }
 
-bool Timestamp::operator<(Timestamp& that_time) {
+bool Timestamp::operator<(Timestamp that_time) {
     return microSecondsSinceEpoch_ < that_time.microSecondsSinceEpoch_;
 }
 
-bool Timestamp::operator>(Timestamp& that_time) {
+bool Timestamp::operator>(Timestamp that_time) {
     return microSecondsSinceEpoch_ > that_time.microSecondsSinceEpoch_;
 }
 
-bool Timestamp::operator<=(Timestamp& that_time) {
+bool Timestamp::operator<=(Timestamp that_time) {
     return microSecondsSinceEpoch_ <= that_time.microSecondsSinceEpoch_;
 }
 
-bool Timestamp::operator>=(Timestamp& that_time) {
+bool Timestamp::operator>=(Timestamp that_time) {
     return microSecondsSinceEpoch_ >= that_time.microSecondsSinceEpoch_;
 }
 

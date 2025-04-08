@@ -56,11 +56,11 @@ public:
     // wakeup
     int wakeupFd_;
     std::unique_ptr<Channel>wakeupChannel_;
-    
+
     // Channel
     ChannelList activeChannels_;
     
-    std::unique_ptr<TimerQueue>timerqueue_;
+    std::unique_ptr<TimerQueue> timerqueue_;
     std::mutex mtx;
     std::vector<Functor>pendingFunctors_;
 
