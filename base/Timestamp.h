@@ -16,11 +16,11 @@ public:
     time_t secondsSinceEpoch() const;
     int64_t microSecondsSinceEpoch() const;
     bool valid() const;
-    bool operator==(Timestamp);
-    bool operator<(Timestamp);
-    bool operator>(Timestamp);
-    bool operator<=(Timestamp);
-    bool operator>=(Timestamp);
+    bool operator==(const Timestamp) const;
+    bool operator<(const Timestamp) const;
+    bool operator>(const Timestamp) const;
+    bool operator<=(const Timestamp) const;
+    bool operator>=(const Timestamp) const;
 
     static double timeDifference(Timestamp high, Timestamp low);
     static Timestamp addTime(Timestamp timestamp,double seconds);

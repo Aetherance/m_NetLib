@@ -146,3 +146,9 @@ void EventLoop::wakeup() {
 int EventLoop::makeWakeUpFd() {
     return eventfd(0,EFD_NONBLOCK | EFD_CLOEXEC);
 }
+
+void EventLoop::handleRead() {
+    uint64_t num;
+    ssize_t n = ::read(wakeupFd_,&num,sizeof(num));
+    // 异常处理缺少!
+}
