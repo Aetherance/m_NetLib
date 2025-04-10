@@ -10,6 +10,8 @@ using namespace ilib::net;
 
 thread_local EventLoop * t_loopInThisThread = nullptr;
 
+IgnoreSigPipe __on;
+
 EventLoop::EventLoop() : 
     looping_(false) , threadid_(std::this_thread::get_id()) , 
     poller_(std::make_unique<Poller>(this)) , wakeupFd_(makeWakeUpFd()) ,

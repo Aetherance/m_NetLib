@@ -9,6 +9,7 @@
 #include"TimerQueue.h"
 #include"TimerId.h"
 #include<mutex>
+#include"sigpipe.h"
 
 namespace ilib {
 namespace net {
@@ -38,7 +39,7 @@ public:
     void queueInLoop(const Functor& cb);
 
     void removeChannel(Channel * channel);
-    
+
 private:
     void abortNotInLoopThread();
     void handleRead();
