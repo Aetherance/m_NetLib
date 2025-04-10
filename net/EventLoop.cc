@@ -152,3 +152,7 @@ void EventLoop::handleRead() {
     ssize_t n = ::read(wakeupFd_,&num,sizeof(num));
     // 异常处理缺少!
 }
+
+void EventLoop::removeChannel(Channel * channel) {
+    poller_->removeChannel(channel);
+}

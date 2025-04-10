@@ -16,6 +16,7 @@ public:
     inline void setReadCallback(const EventCallback & cb);
     inline void setWriteCallback(const EventCallback & cb);
     inline void setErrorCallback(const EventCallback & cb);
+    inline void setCloseCallback(const EventCallback & cb);
 
     inline int fd() const;
     inline int events() const;
@@ -31,6 +32,8 @@ public:
     inline void set_index(int idx);
 
     inline EventLoop *ownerLoop();
+
+    inline bool isWriting() const;
 private:
     void update();
 
@@ -47,6 +50,7 @@ private:
     EventCallback readCallback;
     EventCallback writeCallback;
     EventCallback errorCallback;
+    EventCallback closeCallback;
 };
 
 void Channel::setReadCallback(const EventCallback &cb) {
@@ -59,6 +63,10 @@ void Channel::setWriteCallback(const EventCallback &cb) {
 
 void Channel::setErrorCallback(const EventCallback &cb) {
     errorCallback = cb;
+}
+
+void Channel::setCloseCallback(const EventCallback &cb) {
+    closeCallback = cb;
 }
 
 int Channel::fd() const{
@@ -87,6 +95,10 @@ void Channel::set_index(int idx) {
 
 EventLoop * Channel::ownerLoop() {
     return loop_;
+}
+
+bool Channel::isWriting() const {
+    return events_ & kWriteEvent;
 }
 
 }

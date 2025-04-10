@@ -40,7 +40,6 @@ public:
     void send(const std::string& message);
 
     void shutdown();
-    void setTcpNoDelay(bool on);
 
 private:
     enum StateE { kConnecting, kConnected , kDisconnecting , kDisconnected };

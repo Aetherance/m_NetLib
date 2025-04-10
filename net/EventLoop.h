@@ -37,7 +37,9 @@ public:
     void runInloop(const Functor &cb);
     void queueInLoop(const Functor& cb);
 
-    private:
+    void removeChannel(Channel * channel);
+    
+private:
     void abortNotInLoopThread();
     void handleRead();
     void doPendingFunctors();

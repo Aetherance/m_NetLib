@@ -54,3 +54,19 @@ void Poller::updateChannel(Channel * channel) {
         }
     }
 }
+
+void Poller::removeChannel(Channel * channel) {
+    assertInLoopThread();
+    int idx = channel->index();
+    if(static_cast<size_t>(idx) == pollfds_.size() - 1) {
+        pollfds_.pop_back();
+    } else {
+        int channelAtEnd = pollfds_.back().fd;
+        std::iter_swap(pollfds_.begin() + idx,pollfds_.end() - 1);
+        if(channelAtEnd < 0) {
+            channelAtEnd = -channelAtEnd - 1;
+        }
+        channels_[channelAtEnd]->set_index(idx);
+        pollfds_.pop_back();
+    }
+}
