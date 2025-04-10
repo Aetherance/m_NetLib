@@ -5,6 +5,7 @@
 #include"EventLoop.h"
 #include"InetAddress.h"
 #include"Socket.h"
+#include"Buffer.h"
 
 namespace ilib{
 namespace net{
@@ -21,15 +22,18 @@ public:
 
     TcpConnection(EventLoop * loop,std::string connName,int sockfd,InetAddress localAddr,InetAddress peerAddr);
 
-    EventLoop * getLoop() const;
-    const std::string & name() const;
-    const InetAddress & localAddress() const;
-    const InetAddress & peerAddress() const;
-    bool connectd() const;
+    EventLoop * getLoop() const { return loop_; };
 
-    void setConnectionCallback(ConnectionCallback);
-    void setMessageCallback(MessageCallback);
-    
+    const std::string & name() const { return name_; };
+    const InetAddress & localAddress() const { return localAddr_; }
+    const InetAddress & peerAddress() const { return peerAddr_; }
+    bool connectd() const { return state_ == kConnected; }
+
+    void setConnectionCallback(ConnectionCallback cb) { connectionCallback_ = cb; }
+    void setMessageCallback(MessageCallback cb) { messageCallback_ = cb; }
+    void setWriteCompleteCallback(WriteCompleteCallback cb) { writeCompleteCallback_ = cb; }
+    void setCloseCallback(CloseCallback cb) { closeCallback_ = cb; }
+
     void connectEstablished();
     void connectDestroyed();
 
@@ -64,7 +68,6 @@ private:
 
     Buffer inputBuffer_;
     Buffer outputBuffer_;
-
 };
 
 }
