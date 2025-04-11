@@ -19,7 +19,7 @@ class TcpServer : noncopyable
     using ConnectionMap = std::map<std::string,TcpConnectionPtr>;
     using MessageCallback = std::function<void(const TcpConnectionPtr&,Buffer*,Timestamp)>;
     using WriteCompleteCallback = std::function<void(const TcpConnectionPtr&)>;
-
+    
 public:
     TcpServer(EventLoop * loop,const InetAddress & listenAddr);
     ~TcpServer();
@@ -40,7 +40,7 @@ private:
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
     WriteCompleteCallback writeCompleteCallback_;
-    
+
     bool started_;
     int nextConnId_;
     ConnectionMap connections_;

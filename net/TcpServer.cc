@@ -10,12 +10,16 @@ void TcpServer::newConnection(int sockfd,const InetAddress& peerAddr) {
     std::string connName = name_ + buff;
     LOG_CLIENT_INFO(CONNECT_ON,sockfd);
 
+    EventLoop * subLoop = threadpool_->getNextLoop();
+
     InetAddress localAddr(socket::getLocalAddr(sockfd));
-    TcpConnectionPtr conn(new TcpConnection(loop_,connName,sockfd,localAddr,peerAddr));
+    TcpConnectionPtr conn(new TcpConnection(subLoop,connName,sockfd,localAddr,peerAddr));
     connections_[connName] = conn;
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
-    conn->connectEstablished();
+    conn->setWriteCompleteCallback(writeCompleteCallback_);
+    conn->setCloseCallback([this](const TcpConnectionPtr & conn){ removeConnection(conn); });
+    subLoop->runInloop([conn]{ conn->connectEstablished(); }); // ??
 }
 
 TcpServer::TcpServer(EventLoop * loop,const InetAddress & listenAddr) 
