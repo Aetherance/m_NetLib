@@ -8,7 +8,7 @@ Acceptor::Acceptor(EventLoop * loop,const InetAddress & listenAddr)
       acceptChannel_(loop,acceptSocket_.fd()) , listenning_ (false) {
     acceptSocket_.setReuseAddr(true);
     acceptSocket_.bind(listenAddr);
-    acceptChannel_.setReadCallback([this](){handleRead(); });
+    acceptChannel_.setReadCallback([this](Timestamp){handleRead(); });
 }
 
 void Acceptor::listen() {

@@ -18,7 +18,10 @@ TcpConnection(EventLoop * loop,
                 peerAddr_(peerAddr) 
 {
     LOG_CLIENT_INFO(CONNECT_ON,sockfd);
-    // channel_->setReadCallback([this](){handleRead();});
+    channel_->setReadCallback([this](Timestamp recvTime){ handleRead(recvTime);});
+    channel_->setWriteCallback([this]{ handleWrite(); });
+    channel_->setCloseCallback([this]{ handleClose(); });
+    channel_->setErrorCallback([this]{ handleError(); });
 }
 
 void TcpConnection::handleRead(Timestamp receiveTime) {

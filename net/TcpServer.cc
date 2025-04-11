@@ -18,3 +18,30 @@ void TcpServer::newConnection(int sockfd,const InetAddress& peerAddr) {
     conn->connectEstablished();
 }
 
+TcpServer::TcpServer(EventLoop * loop,const InetAddress & listenAddr) 
+         : loop_(loop),
+           acceptor_(new Acceptor(loop,listenAddr)),
+           threadpool_(new EventLoopThreadPool(loop)),
+           connectionCallback_(),
+           messageCallback_(),
+           started_(false),
+           nextConnId_(1)
+{
+    acceptor_->setNewConnectionCallback([this](int sockfd,const InetAddress &peerAddr){ newConnection(sockfd,peerAddr); });
+}
+
+TcpServer::~TcpServer() {
+
+}
+
+void TcpServer::start() {
+
+}
+
+void TcpServer::removeConnection(const TcpConnectionPtr & conn) {
+
+}
+
+void TcpServer::removeConnectionInLoop(const TcpConnectionPtr & conn) {
+    
+}

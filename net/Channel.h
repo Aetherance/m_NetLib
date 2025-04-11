@@ -11,9 +11,10 @@ class Channel : noncopyable
 {
 public:
     using EventCallback = std::function<void()>;
+    using ReadEventCallback = std::function<void(Timestamp)>;
     Channel(EventLoop*loop,int fd);
     void handleEvent();
-    inline void setReadCallback(const EventCallback & cb);
+    inline void setReadCallback(const ReadEventCallback & cb);
     inline void setWriteCallback(const EventCallback & cb);
     inline void setErrorCallback(const EventCallback & cb);
     inline void setCloseCallback(const EventCallback & cb);
@@ -47,13 +48,13 @@ private:
     int revents_;
     int index_;
 
-    EventCallback readCallback;
+    ReadEventCallback readCallback;
     EventCallback writeCallback;
     EventCallback errorCallback;
     EventCallback closeCallback;
 };
 
-void Channel::setReadCallback(const EventCallback &cb) {
+void Channel::setReadCallback(const ReadEventCallback &cb) {
     readCallback = cb;
 }
 
