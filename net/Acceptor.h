@@ -1,10 +1,11 @@
+#ifndef ACCEPTOR_H
+#define ACCEPTOR_H
+
 #include<functional>
 #include"EventLoop.h"
 #include"InetAddress.h"
 #include"Socket.h"
 
-#ifndef ACCEPTOR_H
-#define ACCEPTOR_H
 namespace ilib{
 namespace net{
 class Acceptor

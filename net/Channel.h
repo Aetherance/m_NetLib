@@ -3,17 +3,19 @@
 
 #include<functional>
 #include"../base/noncopyable.h"
+#include"../base/Timestamp.h"
 
 namespace ilib {
 namespace net {
+
 class EventLoop;
 class Channel : noncopyable
 {
 public:
     using EventCallback = std::function<void()>;
-    using ReadEventCallback = std::function<void(Timestamp)>;
+    using ReadEventCallback = std::function<void(base::Timestamp)>;
     Channel(EventLoop*loop,int fd);
-    void handleEvent();
+    void handleEvent(base::Timestamp);
     inline void setReadCallback(const ReadEventCallback & cb);
     inline void setWriteCallback(const EventCallback & cb);
     inline void setErrorCallback(const EventCallback & cb);

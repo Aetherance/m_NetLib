@@ -91,10 +91,6 @@ void Buffer::ensureWritableBytes(size_t len) {
     assert(writableBytes() >= len);
 }
 
-void Buffer::hasWritten(size_t len) {
-    writeIndex_ += len;
-}
-
 void Buffer::prepend(const void * data ,size_t len) {
     assert(len <= prependableBytes());
     readIndex_ -= len;

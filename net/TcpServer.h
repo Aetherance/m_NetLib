@@ -12,9 +12,9 @@
 namespace ilib{
 namespace net{
 
+using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
 class TcpServer : noncopyable
 {
-    using TcpConnectionPtr = std::shared_ptr<TcpConnection>;
     using ConnectionCallback = std::function<void(const TcpConnectionPtr&)>;
     using ConnectionMap = std::map<std::string,TcpConnectionPtr>;
     using MessageCallback = std::function<void(const TcpConnectionPtr&,Buffer*,Timestamp)>;

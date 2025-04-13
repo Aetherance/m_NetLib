@@ -9,7 +9,6 @@ void TcpServer::newConnection(int sockfd,const InetAddress& peerAddr) {
     snprintf(buff,sizeof(buff),"#%d",nextConnId_);
     ++nextConnId_;
     std::string connName = name_ + buff;
-    LOG_CLIENT_INFO(CONNECT_ON,sockfd);
 
     EventLoop * subLoop = threadpool_->getNextLoop();
 

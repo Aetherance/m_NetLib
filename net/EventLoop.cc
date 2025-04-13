@@ -25,7 +25,7 @@ EventLoop::EventLoop() :
         t_loopInThisThread = this;
     }
 
-    wakeupChannel_->setReadCallback([this]{handleRead();});
+    wakeupChannel_->setReadCallback([this](Timestamp){handleRead();});
     wakeupChannel_->enableReading();
 }
 
@@ -54,9 +54,9 @@ void EventLoop::loop() {
 
     while (!quit_) {
         activeChannels_.clear();
-        poller_->poll(-1,activeChannels_);
+        auto retTime = poller_->poll(-1,activeChannels_);
         for(auto channel : activeChannels_) {
-            channel->handleEvent();
+            channel->handleEvent(retTime);
         }
         doPendingFunctors();
     }
@@ -115,7 +115,7 @@ void EventLoop::runInloop(const Functor&cb) {
 
 void EventLoop::queueInLoop(const Functor &cb) {
     {
-        std::unique_lock<std::mutex>(mtx);
+        std::lock_guard lock(mtx);
         pendingFunctors_.push_back(cb);
     }
 

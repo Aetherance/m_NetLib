@@ -27,7 +27,7 @@ public:
     const std::string & name() const { return name_; };
     const InetAddress & localAddress() const { return localAddr_; }
     const InetAddress & peerAddress() const { return peerAddr_; }
-    bool connectd() const { return state_ == kConnected; }
+    bool connected() const { return state_ == kConnected; }
 
     void setConnectionCallback(ConnectionCallback cb) { connectionCallback_ = cb; }
     void setMessageCallback(MessageCallback cb) { messageCallback_ = cb; }

@@ -17,7 +17,7 @@ void Channel::update() {
     loop_->updateChannel(this);
 }
 
-void Channel::handleEvent() {
+void Channel::handleEvent(Timestamp receiveTime) {
     if(revents_ & POLLNVAL) {
         LOG_WARN("Chanenl::handle_event() POLLNVAL");
     }
@@ -30,7 +30,7 @@ void Channel::handleEvent() {
 
     if(revents_ & (POLLIN | POLLPRI | POLLRDHUP)) {
         if(readCallback) {
-            readCallback();
+            readCallback(receiveTime);
         }
     }
 

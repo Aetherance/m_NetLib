@@ -129,6 +129,7 @@ void TcpConnection::connectEstablished() {
     assert(state_ == kConnecting);
     setState(kConnected);
     channel_->enableReading();
+    // LOG_INFO("A connection has established!");
     connectionCallback_(shared_from_this());
 }
 

@@ -35,7 +35,7 @@ inline EventLoopThread::~EventLoopThread() {
 }
 
 inline EventLoop * EventLoopThread::startLoop() {
-    thread_ = std::thread(threadFunc);
+    thread_ = std::thread([this]{ threadFunc(); });
 
     {
         std::unique_lock lock(mutex_);
