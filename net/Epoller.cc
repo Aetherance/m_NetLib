@@ -29,7 +29,7 @@ Timestamp Epoller::poll(int timeoutMs,ChannelList &activeChannels) {
     } else if(numEvents == 0) {
         LOG_INFO("epoll: nothing happend!");
     } else {
-        LOG_ERROR("epoll");
+        LOG_WARN("epoll ret val < 0");
     }
     return now;
 }

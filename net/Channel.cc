@@ -22,6 +22,12 @@ void Channel::handleEvent(Timestamp receiveTime) {
         LOG_WARN("Chanenl::handle_event() POLLNVAL");
     }
 
+    if((revents_ & POLLHUP) && !(revents_ & POLLIN)) {
+        if(closeCallback) {
+            closeCallback();
+        }
+    }
+
     if(revents_ & (POLLERR | POLLNVAL)) {
         if(errorCallback) {
             errorCallback();

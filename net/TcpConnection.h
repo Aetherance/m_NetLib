@@ -28,6 +28,7 @@ public:
     const InetAddress & localAddress() const { return localAddr_; }
     const InetAddress & peerAddress() const { return peerAddr_; }
     bool connected() const { return state_ == kConnected; }
+    bool disconnected() const { return state_ == kDisconnected; }
 
     void setConnectionCallback(ConnectionCallback cb) { connectionCallback_ = cb; }
     void setMessageCallback(MessageCallback cb) { messageCallback_ = cb; }
