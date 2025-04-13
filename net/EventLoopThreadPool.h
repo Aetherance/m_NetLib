@@ -27,6 +27,10 @@ private:
     std::vector<EventLoop*>loops_;
 };
 
+inline void EventLoopThreadPool::setThreadNum(int numThreads) {
+    numThreads_ = numThreads;
+}
+
 }
 }
 

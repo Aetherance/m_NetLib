@@ -26,8 +26,9 @@ public:
 
     void start();
 
-    void setConnectionCallback(const ConnectionCallback & cb);
-    void setMessageCallback(const MessageCallback & cb);
+    void setThreadNum(int numThreads);
+    void setConnectionCallback(const ConnectionCallback & cb) { connectionCallback_ = cb; };
+    void setMessageCallback(const MessageCallback & cb) { messageCallback_ = cb; };
 private:
     void newConnection(int sockfd,const InetAddress& peerAddr);
     void removeConnection(const TcpConnectionPtr & conn);

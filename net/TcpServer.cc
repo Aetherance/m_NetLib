@@ -1,5 +1,6 @@
 #include"../base/logger.h"
 #include"TcpServer.h"
+#include<assert.h>
 using namespace ilib::net;
 
 void TcpServer::newConnection(int sockfd,const InetAddress& peerAddr) {
@@ -39,13 +40,30 @@ TcpServer::~TcpServer() {
 }
 
 void TcpServer::start() {
+    if(! started_) {
+        started_ = true;
+        threadpool_->start();
+    }
 
+    if(! acceptor_->listenning()) {
+        loop_->runInloop([this]{ acceptor_->listen(); });
+    }
 }
 
 void TcpServer::removeConnection(const TcpConnectionPtr & conn) {
-
+    loop_->runInloop([this,conn]{ removeConnectionInLoop(conn); });
 }
 
 void TcpServer::removeConnectionInLoop(const TcpConnectionPtr & conn) {
-    
+    loop_->assertInLoopThread();
+    size_t n = connections_.erase(conn->name());
+    (void)n;
+    assert(n == 1);
+    EventLoop * subLoop = conn->getLoop();
+    subLoop->queueInLoop([conn]{ conn->connectDestroyed(); });
+}
+
+void TcpServer::setThreadNum(int numThreads) {
+    assert(numThreads >= 0);
+    threadpool_->setThreadNum(numThreads);
 }
