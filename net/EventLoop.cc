@@ -1,8 +1,8 @@
 #include"EventLoop.h"
 #include<iostream>
-#include<poll.h>
+#include<sys/epoll.h>
 #include"Channel.h"
-#include"Poller.h"
+#include"Epoller.h"
 #include<sys/eventfd.h>
 #include<unistd.h>
 
@@ -14,7 +14,7 @@ IgnoreSigPipe __on;
 
 EventLoop::EventLoop() : 
     looping_(false) , threadid_(std::this_thread::get_id()) , 
-    poller_(std::make_unique<Poller>(this)) , wakeupFd_(makeWakeUpFd()) ,
+    poller_(std::make_unique<Epoller>(this)) , wakeupFd_(makeWakeUpFd()) ,
     wakeupChannel_(new Channel(this,wakeupFd_))
 {
     // 已经存在Eventloop对象
@@ -43,7 +43,7 @@ EventLoop* EventLoop::getThreadLoop() {
     return t_loopInThisThread;
 }
 
-void EventLoop::loop() {
+void EventLoop::loop(int timeout) {
     if(looping_) {
         std::cerr<<"Eventloop: looping\n";
         exit(EXIT_FAILURE);
@@ -54,7 +54,7 @@ void EventLoop::loop() {
 
     while (!quit_) {
         activeChannels_.clear();
-        auto retTime = poller_->poll(-1,activeChannels_);
+        auto retTime = poller_->poll(timeout,activeChannels_);
         for(auto channel : activeChannels_) {
             channel->handleEvent(retTime);
         }

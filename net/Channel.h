@@ -37,6 +37,8 @@ public:
     inline EventLoop *ownerLoop();
 
     inline bool isWriting() const;
+
+    void setRevents(int revent) { revents_ = revent; }; // epoll using
 private:
     void update();
 

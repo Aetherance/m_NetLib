@@ -27,7 +27,7 @@ public:
     }
 
     void start() {
-        server_.setThreadNum(4);
+        server_.setThreadNum(32);
         server_.start();
     }
 

@@ -14,7 +14,7 @@
 namespace ilib {
 namespace net {
 
-class Poller;
+class Epoller;
 class Channel;
 class EventLoop : noncopyable
 {
@@ -22,7 +22,7 @@ public:
     EventLoop();
     ~EventLoop();
     
-    void loop();
+    void loop(int timeout = -1);
     void quit();
     
     void assertInLoopThread();
@@ -54,7 +54,7 @@ private:
     const std::thread::id threadid_;
     
     // Poller
-    std::unique_ptr<Poller>poller_;
+    std::unique_ptr<Epoller>poller_;
 
     // wakeup
     int wakeupFd_;
